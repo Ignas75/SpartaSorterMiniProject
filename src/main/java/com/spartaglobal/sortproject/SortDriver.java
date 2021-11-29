@@ -8,15 +8,35 @@ public class SortDriver {
     public enum SortableType{STRING("Word"), DOUBLE("Real"), INTEGER("Integer");
         private final String descriptor;
 
-        private SortableType(String descriptor){
+        SortableType(String descriptor){
             this.descriptor = descriptor;
+        }
+
+        public static SortableType getType(String descriptor){
+            for(SortableType type: SortableType.values()){
+                if(type.descriptor.equals(descriptor)){
+                    return type;
+                }
+            }
+            return null;
         }
 
         @Override
         public String toString() {
             return this.descriptor;
         }
-    };
+    }
+
+    public enum SortingAlgorithms{BUBBLESORT, QUICKSORT;
+        public static SortingAlgorithms getType(String name){
+            for(SortingAlgorithms algorithm: SortingAlgorithms.values()){
+                if(algorithm.toString().equals(name)){
+                    return algorithm;
+                }
+            }
+            return null;
+        }
+    }
 
     public static void main(String[] args) {
         mainMenu();
@@ -47,47 +67,38 @@ public class SortDriver {
     // could be made more generic by looking in a package/folder for sort classes count and their names
     public static void sortingProcess(){
         ArrayList<String> choices = new ArrayList<String>();
-        choices.add("BubbleSort");
-        choices.add("QuickSort");
+        for(SortingAlgorithms algorithm: SortingAlgorithms.values()){
+            choices.add(algorithm.toString());
+        }
         String header = "Choose a sorting algorithm:";
         int choice = menuChoice(choices, header);
-        String algorithm = choices.get(choice);
-        String dataType = chooseDataType();
+        String algorithmStr = choices.get(choice);
+        SortingAlgorithms algorithm = SortingAlgorithms.getType(algorithmStr);
+        SortableType dataType = chooseDataType();
         GenericSorter sorter = SorterFactory.makeSorter(algorithm, dataType);
-        switch (dataType){
-            case("Integer"):
-            case("Double"):
-            case("String"):
-        }
+
     }
 
-    public static String chooseDataType(){
+    public static SortableType chooseDataType(){
         ArrayList<String> choices = new ArrayList<String>();
-        choices.add("Integers");
-        choices.add("Reals");
-        choices.add("Words");
+        for(SortableType type: SortableType.values()){
+            choices.add(type.toString());
+        }
         String header = "Choose what you want to sort";
         int choice = menuChoice(choices, header);
-        if (choice == 1) {
-            return "Integer";
-        }
-        else if (choice == 2){
-            return "Double";
-        }
-        else{
-            return "String";
-        }
+        String strChoice = choices.get(choice);
+        return SortableType.getType(strChoice);
     }
 
-    public ArrayList getUserData(String dataType){
+    public ArrayList getUserData(SortableType dataType){
         // setting the expected data format
         String format;
         switch(dataType){
-            case("Integer"):
+            case INTEGER:
                 format = "[0-9]+";
-            case("Double"):
+            case DOUBLE:
                 format = "[[0-9]+] | [[0-9]+.[0-9]]";
-            case("String"):
+            case STRING:
                 format = "[a-zA-Z]+";
                 break;
             default:
@@ -160,17 +171,4 @@ public class SortDriver {
             }
         }
     }
-
-
-
-    public static String arrayToString(int[] list){
-        StringBuilder sb = new StringBuilder();
-        for(int i = 0; i<list.length; i++){
-            sb.append(list[i] + ", ");
-        }
-        return sb.toString();
-    }
-
-
-
 }
