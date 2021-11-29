@@ -78,6 +78,13 @@ public class SortDriver {
         SortingAlgorithms algorithm = SortingAlgorithms.getType(algorithmStr);
         SortableType dataType = chooseDataType();
         GenericSorter sorter = SorterFactory.makeSorter(algorithm, dataType);
+        ArrayList<String> data = getUserData(dataType);
+        String[] strData = (String[]) data.toArray();
+        int size = strData.length;
+        switch (dataType){
+            case INTEGER:
+
+        }
 
     }
 
@@ -92,7 +99,37 @@ public class SortDriver {
         return SortableType.getType(strChoice);
     }
 
-    public ArrayList getUserData(SortableType dataType){
+    // converts String arraylist to one of the target type
+    // if the target type is STRING (or uncovered newly added type) then it returns the list itself without change
+    public static ArrayList convertArrayListType(ArrayList<String> strList, SortableType type){
+        ArrayList list;
+        switch (type){
+            case INTEGER:
+                list = new ArrayList<Integer>();
+                break;
+            case DOUBLE:
+                list = new ArrayList<Double>();
+                break;
+            default:
+                return strList;
+        }
+
+        for(String str: strList){
+            switch (type){
+                case INTEGER:
+                    list.add(Integer.valueOf(str));
+                    break;
+                case DOUBLE:
+                    list.add(Double.valueOf(str));
+                    break;
+            }
+        }
+
+        return list;
+    }
+
+    // receives data in the form of the provided type, returns a String arraylist
+    public static ArrayList getUserData(SortableType dataType){
         // setting the expected data format
         String format;
         switch(dataType){
