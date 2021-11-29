@@ -1,6 +1,6 @@
 package com.spartaglobal.sortproject;
 
-public class TestUtils<E extends Comparable> {
+public class ArrayUtils<E extends Comparable> {
     public boolean isSorted(E[] list){
         if(list.length <= 1){
             return true;

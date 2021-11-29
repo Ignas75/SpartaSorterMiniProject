@@ -66,12 +66,14 @@ public class SortDriver {
 
     // could be made more generic by looking in a package/folder for sort classes count and their names
     public static void sortingProcess(){
+        // finding out user algorithm choice
         ArrayList<String> choices = new ArrayList<String>();
         for(SortingAlgorithms algorithm: SortingAlgorithms.values()){
             choices.add(algorithm.toString());
         }
         String header = "Choose a sorting algorithm:";
         int choice = menuChoice(choices, header);
+        // finding out user data type choice
         String algorithmStr = choices.get(choice);
         SortingAlgorithms algorithm = SortingAlgorithms.getType(algorithmStr);
         SortableType dataType = chooseDataType();
@@ -114,6 +116,7 @@ public class SortDriver {
         // getting data input loop
         while(!finished){
             input = scanner.nextLine();
+            // exit condition
             if(input.length() == 0){
                 finished = true;
             }
@@ -131,6 +134,7 @@ public class SortDriver {
                     }
                 }
             }
+            // handling individual input
             else{
                 input = input.trim();
                 if(input.matches(format)){
@@ -145,21 +149,27 @@ public class SortDriver {
         return list;
     }
 
+    // utility method for displaying a header, followed by a list of choices
+    // returns a value 1-n where n is the number of choices
     public static int menuChoice(ArrayList<String> choices, String header){
         int choice_amount = choices.size();
         while(true){
+            // displaying menu
             System.out.println("\n\n" + header);
             System.out.println("--------------------------------");
             for(int i = 0; i<choice_amount; i++){
                 System.out.println(i+1 + ": " + choices.get(i));
             }
             System.out.println("Please enter your choice: ");
+            // getting user input
             Scanner scanner = new Scanner(System.in);
             String userChoice = scanner.nextLine();
             userChoice = userChoice.trim();
+            // invalid input
             if(!userChoice.matches("[0-9]*")){
                 System.out.println("Please enter a whole number");
             }
+            // valid input
             else{
                 int choice = Integer.parseInt(userChoice);
                 if(choice <= choice_amount && choice >= 1){

@@ -79,7 +79,7 @@ public class BubbleSorterTest {
         // test generic parameters
         int size = 100;
         boolean displayOutput = true;
-        TestUtils<Integer> testUtils = new TestUtils<>();
+        ArrayUtils<Integer> testUtils = new ArrayUtils<>();
 
         BubbleSorter<Integer> integerSorter = new BubbleSorter<>();
         Integer[] input = ListGenerator.generateRandomIntegerList(size);
