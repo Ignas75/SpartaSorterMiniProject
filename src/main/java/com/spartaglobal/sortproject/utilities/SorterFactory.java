@@ -1,6 +1,9 @@
-package com.spartaglobal.sortproject;
-import com.spartaglobal.sortproject.SortDriver.SortingAlgorithms;
-import com.spartaglobal.sortproject.SortDriver.SortableType;
+package com.spartaglobal.sortproject.utilities;
+import com.spartaglobal.sortproject.SorterStarter.SortingAlgorithms;
+import com.spartaglobal.sortproject.SorterStarter.SortableType;
+import com.spartaglobal.sortproject.sorters.BubbleSorter;
+import com.spartaglobal.sortproject.sorters.GenericSorter;
+import com.spartaglobal.sortproject.sorters.QuickSorter;
 
 public class SorterFactory {
     public static GenericSorter makeSorter(SortingAlgorithms algorithm , SortableType dataType){

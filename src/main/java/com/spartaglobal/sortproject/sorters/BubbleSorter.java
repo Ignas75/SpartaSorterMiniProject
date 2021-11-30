@@ -1,17 +1,22 @@
-package com.spartaglobal.sortproject;
+package com.spartaglobal.sortproject.sorters;
 
-public class BubbleSorter<E extends  Comparable> extends GenericSorter<E>{
+import java.util.ArrayList;
+import java.util.List;
+
+public class BubbleSorter<E extends  Comparable> extends GenericSorter<E> {
 
     @Override
-    public E[] sort(E[] list){
+    public List<E> sort(List<E> list){
         int current = 0;
-        int end = list.length;
+        int end = list.size();
         while(end>0){
             while(current<end-1){
-                if(list[current].compareTo(list[current+1]) > 0){
-                    E temp = list[current];
-                    list[current] = list[current+1];
-                    list[current+1] = temp;
+                E currentVal = list.get(current);
+                E nextVal = list.get(current+1);
+                if(currentVal.compareTo(nextVal) > 0){
+                    E temp = currentVal;
+                    list.set(current, nextVal);
+                    list.set(current+1, currentVal);
                 }
                 current++;
             }

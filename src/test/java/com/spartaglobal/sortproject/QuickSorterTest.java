@@ -1,6 +1,13 @@
 package com.spartaglobal.sortproject;
 
+import com.spartaglobal.sortproject.sorters.BubbleSorter;
+import com.spartaglobal.sortproject.sorters.QuickSorter;
+import com.spartaglobal.sortproject.utilities.ArrayUtils;
+import com.spartaglobal.sortproject.utilities.ListGenerator;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -13,25 +20,25 @@ public class QuickSorterTest {
         ArrayUtils<Integer> testUtils = new ArrayUtils<>();
 
         BubbleSorter<Integer> integerSorter = new BubbleSorter<>();
-        Integer[] input = ListGenerator.generateRandomIntegerList(size);
+        ArrayList<Integer> input = ListGenerator.generateRandomIntegerList(size);
 
         // displaying generated list
         if(displayOutput){
             System.out.println("Input: ");
-            testUtils.outputArray(input);
+            System.out.println(input);
         }
 
         // test run + timing
         long start = System.nanoTime();
         QuickSorter<Integer> quickSorter = new QuickSorter<>();
-        Integer[] actual = quickSorter.sort(input);
+        List<Integer> actual = quickSorter.sort(input);
         long end = System.nanoTime();
 
         // displaying list + time taken
         if(displayOutput){
             System.out.println("\nDuration: " + (end-start)+ "ns") ;
             System.out.println("Output: ");
-            testUtils.outputArray(actual);
+            System.out.println(actual);
         }
 
         // validity check

@@ -1,15 +1,23 @@
 package com.spartaglobal.sortproject;
 
+import com.spartaglobal.sortproject.sorters.GenericSorter;
+import com.spartaglobal.sortproject.utilities.SorterFactory;
+import com.spartaglobal.sortproject.utilities.TypeConverter;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class SortDriver {
-    // TODO: replace dataType with SortableType within this class
-    public enum SortableType{STRING("Word"), DOUBLE("Real"), INTEGER("Integer");
-        private final String descriptor;
+public class SorterStarter {
+    public enum SortableType{STRING("Word", "[+-]?[a-zA-Z]+"),
+        DOUBLE("Real", "[+-]?\\d+(?:\\.\\d+)?"),
+        INTEGER("Integer", "[+-]?[0-9]+");
 
-        SortableType(String descriptor){
+        private final String descriptor;
+        private final String format;
+
+        SortableType(String descriptor, String format){
             this.descriptor = descriptor;
+            this.format = format;
         }
 
         public static SortableType getType(String descriptor){
@@ -24,6 +32,10 @@ public class SortDriver {
         @Override
         public String toString() {
             return this.descriptor;
+        }
+
+        public String getFormat(){
+            return this.format;
         }
     }
 
@@ -74,18 +86,30 @@ public class SortDriver {
         String header = "Choose a sorting algorithm:";
         int choice = menuChoice(choices, header);
         // finding out user data type choice
-        String algorithmStr = choices.get(choice);
+        String algorithmStr = choices.get(choice-1);
         SortingAlgorithms algorithm = SortingAlgorithms.getType(algorithmStr);
         SortableType dataType = chooseDataType();
         GenericSorter sorter = SorterFactory.makeSorter(algorithm, dataType);
-        ArrayList<String> data = getUserData(dataType);
-        String[] strData = (String[]) data.toArray();
-        int size = strData.length;
-        switch (dataType){
-            case INTEGER:
-
+        ArrayList data = getUserData(dataType);
+        System.out.println(data);
+        try{
+            switch(dataType){
+                case INTEGER:
+                    data = TypeConverter.stringToInteger(data);
+                    break;
+                case DOUBLE:
+                    data = TypeConverter.stringToDouble(data);
+                    break;
+                case STRING:
+                default:
+                    break;
+            }
+            sorter.sort(data);
+            System.out.println(data);
+        } catch(Exception e){
+            System.out.println("Expected data type mismatch with received data");
+            e.printStackTrace();
         }
-
     }
 
     public static SortableType chooseDataType(){
@@ -95,54 +119,15 @@ public class SortDriver {
         }
         String header = "Choose what you want to sort";
         int choice = menuChoice(choices, header);
-        String strChoice = choices.get(choice);
+        String strChoice = choices.get(choice-1);
         return SortableType.getType(strChoice);
-    }
-
-    // converts String arraylist to one of the target type
-    // if the target type is STRING (or uncovered newly added type) then it returns the list itself without change
-    public static ArrayList convertArrayListType(ArrayList<String> strList, SortableType type){
-        ArrayList list;
-        switch (type){
-            case INTEGER:
-                list = new ArrayList<Integer>();
-                break;
-            case DOUBLE:
-                list = new ArrayList<Double>();
-                break;
-            default:
-                return strList;
-        }
-
-        for(String str: strList){
-            switch (type){
-                case INTEGER:
-                    list.add(Integer.valueOf(str));
-                    break;
-                case DOUBLE:
-                    list.add(Double.valueOf(str));
-                    break;
-            }
-        }
-
-        return list;
     }
 
     // receives data in the form of the provided type, returns a String arraylist
     public static ArrayList getUserData(SortableType dataType){
         // setting the expected data format
-        String format;
-        switch(dataType){
-            case INTEGER:
-                format = "[0-9]+";
-            case DOUBLE:
-                format = "[[0-9]+] | [[0-9]+.[0-9]]";
-            case STRING:
-                format = "[a-zA-Z]+";
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + dataType);
-        }
+        String format = dataType.getFormat();
+
         // loop setup
         boolean finished = false;
         ArrayList<String> list = new ArrayList<>();
@@ -167,7 +152,7 @@ public class SortDriver {
                     }
                     else{
                         System.out.println("Your entry '" + entry + "' does not match the " + dataType +
-                                "format, it has been rejected");
+                                " format, it has been rejected");
                     }
                 }
             }
@@ -179,7 +164,7 @@ public class SortDriver {
                 }
                 else{
                     System.out.println("Your entry '" + input + "' does not match the " + dataType +
-                            "format, it has been rejected");
+                            " format, it has been rejected");
                 }
             }
         }
@@ -218,4 +203,6 @@ public class SortDriver {
             }
         }
     }
+
+
 }
