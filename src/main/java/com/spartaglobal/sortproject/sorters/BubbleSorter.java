@@ -1,6 +1,5 @@
 package com.spartaglobal.sortproject.sorters;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BubbleSorter<E extends  Comparable> extends GenericSorter<E> {
@@ -17,6 +16,26 @@ public class BubbleSorter<E extends  Comparable> extends GenericSorter<E> {
                     E temp = currentVal;
                     list.set(current, nextVal);
                     list.set(current+1, currentVal);
+                }
+                current++;
+            }
+            current = 0;
+            end --;
+        }
+        return list;
+    }
+
+    public E[] sort(E[] list){
+        int current = 0;
+        int end = list.length;
+        while(end>0){
+            while(current<end-1){
+                E currentVal = list[current];
+                E nextVal = list[current+1];
+                if(currentVal.compareTo(nextVal) > 0){
+                    E temp = currentVal;
+                    list[current] = nextVal;
+                    list[current+1] =  currentVal;
                 }
                 current++;
             }

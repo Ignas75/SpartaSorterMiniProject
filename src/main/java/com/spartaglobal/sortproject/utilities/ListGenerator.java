@@ -1,6 +1,7 @@
 package com.spartaglobal.sortproject.utilities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListGenerator{
     public static int[] generateRandomIntArray(int size){
@@ -20,8 +21,8 @@ public class ListGenerator{
         return arr;
     }
 
-    public static ArrayList<Integer> generateRandomIntegerList(int size){
-        ArrayList<Integer> list = new ArrayList<>(size);
+    public static List<Integer> generateRandomIntegerList(int size){
+        List<Integer> list = new ArrayList<>(size);
         Integer[] array = generateRandomIntegerArray(size);
         for(int i = 0; i<size; i++){
             list.add(array[i]);

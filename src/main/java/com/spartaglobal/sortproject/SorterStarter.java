@@ -57,9 +57,10 @@ public class SorterStarter {
     public static void mainMenu(){
         boolean finished = false;
         while(!finished){
-            ArrayList<String> choices = new ArrayList<String>();
+            ArrayList<String> choices = new ArrayList<>();
             choices.add("Sort a list");
             choices.add("Compare sorting algorithms");
+            choices.add("Compare array and list implementations");
             choices.add("Exit the program");
             String header = "Main Menu";
             int choice = menuChoice(choices, header);
@@ -70,6 +71,9 @@ public class SorterStarter {
             else if(choice == 2){
                 /* TODO: implement compare sorting algorithms */
             }
+            else if(choice == 3){
+                // TODO: implement comparing array and list implementations
+            }
             else{
                 finished = true;
             }
@@ -79,15 +83,7 @@ public class SorterStarter {
     // could be made more generic by looking in a package/folder for sort classes count and their names
     public static void sortingProcess(){
         // finding out user algorithm choice
-        ArrayList<String> choices = new ArrayList<String>();
-        for(SortingAlgorithms algorithm: SortingAlgorithms.values()){
-            choices.add(algorithm.toString());
-        }
-        String header = "Choose a sorting algorithm:";
-        int choice = menuChoice(choices, header);
-        // finding out user data type choice
-        String algorithmStr = choices.get(choice-1);
-        SortingAlgorithms algorithm = SortingAlgorithms.getType(algorithmStr);
+        SortingAlgorithms algorithm = chooseSortingAlgorithm();
         SortableType dataType = chooseDataType();
         GenericSorter sorter = SorterFactory.makeSorter(algorithm, dataType);
         ArrayList data = getUserData(dataType);
@@ -112,8 +108,20 @@ public class SorterStarter {
         }
     }
 
+    public static SortingAlgorithms chooseSortingAlgorithm(){
+        ArrayList<String> choices = new ArrayList<>();
+        for(SortingAlgorithms algorithm: SortingAlgorithms.values()){
+            choices.add(algorithm.toString());
+        }
+        String header = "Choose a sorting algorithm:";
+        int choice = menuChoice(choices, header);
+        // finding out user data type choice
+        String algorithmStr = choices.get(choice-1);
+        return SortingAlgorithms.getType(algorithmStr);
+    }
+
     public static SortableType chooseDataType(){
-        ArrayList<String> choices = new ArrayList<String>();
+        ArrayList<String> choices = new ArrayList<>();
         for(SortableType type: SortableType.values()){
             choices.add(type.toString());
         }

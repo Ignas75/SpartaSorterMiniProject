@@ -20,7 +20,7 @@ public class QuickSorterTest {
         ArrayUtils<Integer> testUtils = new ArrayUtils<>();
 
         BubbleSorter<Integer> integerSorter = new BubbleSorter<>();
-        ArrayList<Integer> input = ListGenerator.generateRandomIntegerList(size);
+        List<Integer> input = ListGenerator.generateRandomIntegerList(size);
 
         // displaying generated list
         if(displayOutput){
