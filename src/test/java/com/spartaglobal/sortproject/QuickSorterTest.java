@@ -43,5 +43,12 @@ public class QuickSorterTest {
 
         // validity check
         assertEquals(true, testUtils.isSorted(actual));
+
+        /*
+         TODO: add test for array implementation
+         TODO: reduce code repetition by having a setup method?
+         TODO: add tests for strings
+        */
+
     }
 }

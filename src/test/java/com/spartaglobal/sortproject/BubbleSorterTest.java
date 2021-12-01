@@ -6,7 +6,6 @@ import com.spartaglobal.sortproject.utilities.ListGenerator;
 import org.junit.jupiter.api.Test;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -111,4 +110,11 @@ public class BubbleSorterTest {
         // validity check
         assertEquals(true, testUtils.isSorted(actual));
     }
+
+    /*
+     TODO: add test for array implementation
+     TODO: reduce code repetition by having a setup method?
+     TODO: add tests for strings
+    */
+
 }

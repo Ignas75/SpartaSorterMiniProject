@@ -1,6 +1,6 @@
 package com.spartaglobal.sortproject.utilities;
-import com.spartaglobal.sortproject.SorterStarter.SortingAlgorithms;
-import com.spartaglobal.sortproject.SorterStarter.SortableType;
+import com.spartaglobal.sortproject.SortDriver.SortingAlgorithms;
+import com.spartaglobal.sortproject.SortDriver.SortableType;
 import com.spartaglobal.sortproject.sorters.BubbleSorter;
 import com.spartaglobal.sortproject.sorters.GenericSorter;
 import com.spartaglobal.sortproject.sorters.QuickSorter;

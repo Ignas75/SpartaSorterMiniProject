@@ -7,7 +7,7 @@ import com.spartaglobal.sortproject.utilities.TypeConverter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class SorterStarter {
+public class SortDriver {
     public enum SortableType{STRING("Word", "[+-]?[a-zA-Z]+"),
         DOUBLE("Real", "[+-]?\\d+(?:\\.\\d+)?"),
         INTEGER("Integer", "[+-]?[0-9]+");
@@ -178,6 +178,8 @@ public class SorterStarter {
         }
         return list;
     }
+
+    // TODO: refactor to take in K, V so that it's clearer what menu choice is being made
 
     // utility method for displaying a header, followed by a list of choices
     // returns a value 1-n where n is the number of choices
