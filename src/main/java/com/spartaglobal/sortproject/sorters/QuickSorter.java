@@ -52,12 +52,12 @@ public class QuickSorter<E extends  Comparable> extends GenericSorter<E> {
         return list;
     }
 
-    public E[] sort(E[] list){
+    public E[] arraySort(E[] list){
         int size = list.length;
-        return quickSort(list, 0, size-1);
+        return arrayQuickSort(list, 0, size-1);
     }
 
-    private E[] quickSort(E[]list, int left, int right){
+    private E[] arrayQuickSort(E[]list, int left, int right){
         // setup
         int range = right-left;
         int pivot = (int) (Math.random() * range) + left;
@@ -91,10 +91,10 @@ public class QuickSorter<E extends  Comparable> extends GenericSorter<E> {
         }
         // sorting the left and right of the midval if there is sorting to be performed (>=2 elements in sublists)
         if(smaller.size() >= 2){
-            list = quickSort(list, left, left+smaller.size()-1);
+            list = arrayQuickSort(list, left, left+smaller.size()-1);
         }
         if(larger.size() >= 2){
-            list = quickSort(list, right-larger.size()+1, right);
+            list = arrayQuickSort(list, right-larger.size()+1, right);
         }
         return list;
     }

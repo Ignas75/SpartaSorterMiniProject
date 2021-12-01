@@ -6,7 +6,7 @@ import com.spartaglobal.sortproject.utilities.ArrayUtils;
 import com.spartaglobal.sortproject.utilities.ListGenerator;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,7 +19,6 @@ public class QuickSorterTest {
         boolean displayOutput = true;
         ArrayUtils<Integer> testUtils = new ArrayUtils<>();
 
-        BubbleSorter<Integer> integerSorter = new BubbleSorter<>();
         List<Integer> input = ListGenerator.generateRandomIntegerList(size);
 
         // displaying generated list

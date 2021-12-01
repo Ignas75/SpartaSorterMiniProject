@@ -4,4 +4,5 @@ import java.util.List;
 
 public abstract class GenericSorter<E extends Comparable> {
     public abstract List<E> sort(List<E> list);
+    public abstract E[] arraySort(E[] list);
 }

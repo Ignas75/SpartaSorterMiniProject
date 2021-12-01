@@ -1,10 +1,13 @@
 package com.spartaglobal.sortproject;
 
 import com.spartaglobal.sortproject.sorters.GenericSorter;
+import com.spartaglobal.sortproject.utilities.ArrayUtils;
+import com.spartaglobal.sortproject.utilities.ListGenerator;
 import com.spartaglobal.sortproject.utilities.SorterFactory;
 import com.spartaglobal.sortproject.utilities.TypeConverter;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class SortDriver {
@@ -60,7 +63,7 @@ public class SortDriver {
             ArrayList<String> choices = new ArrayList<>();
             choices.add("Sort a list");
             choices.add("Compare sorting algorithms");
-            choices.add("Compare array and list implementations");
+            choices.add("Compare array and list implementations of an algorithm");
             choices.add("Exit the program");
             String header = "Main Menu";
             int choice = menuChoice(choices, header);
@@ -69,10 +72,16 @@ public class SortDriver {
                 sortingProcess();
             }
             else if(choice == 2){
-                /* TODO: implement compare sorting algorithms */
+                if(SortingAlgorithms.values().length < 2){
+                    System.out.println("Somehow there is only one algorithm so we can't compare it against another");
+                    System.out.println("Please choose another menu option");
+                }
+                else{
+                    algorithmComparison();
+                }
             }
             else if(choice == 3){
-                // TODO: implement comparing array and list implementations
+                arraysComparedWithArrayLists();
             }
             else{
                 finished = true;
@@ -108,16 +117,114 @@ public class SortDriver {
         }
     }
 
-    public static SortingAlgorithms chooseSortingAlgorithm(){
+
+    public static void algorithmComparison(){
+        // choosing the algorithms to compare
+        SortingAlgorithms algorithm1;
+        SortingAlgorithms algorithm2;
+        if(SortingAlgorithms.values().length == 2){
+            System.out.println("\nThere are only two algorithms so we will compare them, they are:");
+            algorithm1 = SortingAlgorithms.values()[0];
+            algorithm2 = SortingAlgorithms.values()[1];
+            System.out.println(algorithm1);
+            System.out.println(algorithm2);
+        }
+        else{
+            algorithm1 = chooseSortingAlgorithm();
+            algorithm2 = chooseSortingAlgorithm(true, algorithm1);
+            System.out.println("\n We will be comparing" + algorithm1 + " and " + algorithm2);
+        }
+        // comparing sorting algorithms
+        int arraySize = getUserComparisonAmount();
+        int[] input = ListGenerator.generateRandomIntArray(arraySize);
+        ArrayUtils<Integer> arrayUtils = new ArrayUtils<>();
+        List<Integer> input1 = arrayUtils.copyIntArrayToIntegerArrayList(input);
+        List<Integer> input2 = arrayUtils.copyIntArrayToIntegerArrayList(input);
+        System.out.println("Sorting: ");
+        System.out.println(input1);
+        long algorithmOneDuration = timeSort(algorithm1, input1, true);
+
+        long algorithmTwoDuration = timeSort(algorithm2, input2, true);
+        System.out.println(algorithm2 + " finished in " + algorithmTwoDuration + "ns");
+    }
+
+    public static void arraysComparedWithArrayLists(){
+        SortingAlgorithms algorithm = chooseSortingAlgorithm();
+        SorterFactory.makeSorter(algorithm, SortableType.INTEGER);
+        int quantity = getUserComparisonAmount();
+        int[] input = ListGenerator.generateRandomIntArray(quantity);
+        ArrayUtils<Integer> arrayUtils = new ArrayUtils<>();
+        Integer[] arrayInput = arrayUtils.copyIntArrayToIntegerArray(input);
+        ArrayList<Integer> arrayListInput = arrayUtils.copyIntArrayToIntegerArrayList(input);
+        long arrayDuration = timeSort(algorithm, arrayInput, true);
+        long arrayListDuration = timeSort(algorithm, arrayListInput, true);
+    }
+
+    public static long timeSort(SortingAlgorithms algorithm, List<Integer> input, boolean displaySortResult){
+        GenericSorter<Integer> sorter = SorterFactory.makeSorter(algorithm, SortableType.INTEGER);
+        long start = System.nanoTime();
+        List<Integer> output = sorter.sort(input);
+        long end = System.nanoTime();
+        long duration = end-start;
+        if(displaySortResult) {
+            System.out.println(output);
+            System.out.println(algorithm + " finished in " + duration + "ns");
+        }
+        return duration;
+    }
+
+    // main reason for this code repetition is to conduct array and arraylist implementation comparisons
+    public static long timeSort(SortingAlgorithms algorithm, Integer[] input, boolean displaySortResult){
+        GenericSorter<Integer> sorter = SorterFactory.makeSorter(algorithm, SortableType.INTEGER);
+        long start = System.nanoTime();
+        Integer[]  output = sorter.arraySort(input);
+        long end = System.nanoTime();
+        long duration = end-start;
+        if(displaySortResult) {
+            System.out.println(output);
+            System.out.println(algorithm + " finished in " + duration + "ns");
+        }
+        return duration;
+    }
+
+    // Exception handling showcase
+    public static int getUserComparisonAmount(){
+        Scanner scanner = new Scanner(System.in);
+        // default value, removing this makes Java Complain about lack of initialisation
+        int quantity = 1000;
+        boolean succeeded = false;
+        while(!succeeded){
+            try{
+                System.out.println("\nEnter how many elements would you like in your array:");
+                if(scanner.hasNextInt()){
+                    quantity = scanner.nextInt();
+                    succeeded = true;
+                }
+            }catch(Exception e){
+                System.out.println("Please enter nothing but a whole number");
+            }
+        }
+        return quantity;
+
+    }
+
+    public static SortingAlgorithms chooseSortingAlgorithm(boolean excludeChoice, SortingAlgorithms excludedAlgorithm){
         ArrayList<String> choices = new ArrayList<>();
         for(SortingAlgorithms algorithm: SortingAlgorithms.values()){
-            choices.add(algorithm.toString());
+            if(!(excludeChoice && algorithm == excludedAlgorithm)){
+                choices.add(algorithm.toString());
+            }
         }
         String header = "Choose a sorting algorithm:";
         int choice = menuChoice(choices, header);
         // finding out user data type choice
         String algorithmStr = choices.get(choice-1);
         return SortingAlgorithms.getType(algorithmStr);
+    }
+
+    public static SortingAlgorithms chooseSortingAlgorithm(){
+        // doesn't matter what is excluded because nothing is excluded
+        return chooseSortingAlgorithm(false, SortingAlgorithms.values()[0]);
     }
 
     public static SortableType chooseDataType(){

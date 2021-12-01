@@ -13,7 +13,6 @@ public class BubbleSorter<E extends  Comparable> extends GenericSorter<E> {
                 E currentVal = list.get(current);
                 E nextVal = list.get(current+1);
                 if(currentVal.compareTo(nextVal) > 0){
-                    E temp = currentVal;
                     list.set(current, nextVal);
                     list.set(current+1, currentVal);
                 }
@@ -25,7 +24,8 @@ public class BubbleSorter<E extends  Comparable> extends GenericSorter<E> {
         return list;
     }
 
-    public E[] sort(E[] list){
+    @Override
+    public E[] arraySort(E[] list){
         int current = 0;
         int end = list.length;
         while(end>0){
@@ -33,7 +33,6 @@ public class BubbleSorter<E extends  Comparable> extends GenericSorter<E> {
                 E currentVal = list[current];
                 E nextVal = list[current+1];
                 if(currentVal.compareTo(nextVal) > 0){
-                    E temp = currentVal;
                     list[current] = nextVal;
                     list[current+1] =  currentVal;
                 }

@@ -1,5 +1,6 @@
 package com.spartaglobal.sortproject.utilities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ArrayUtils<E extends Comparable> {
@@ -33,5 +34,21 @@ public class ArrayUtils<E extends Comparable> {
             output = output.append(list[i].toString() + ", ");
         }
         return output.toString();
+    }
+
+    public ArrayList<Integer> copyIntArrayToIntegerArrayList(int[] list){
+        ArrayList<Integer> output = new ArrayList<>(list.length);
+        for(int i: list){
+            output.add(i);
+        }
+        return output;
+    }
+
+    public Integer[] copyIntArrayToIntegerArray(int[] list){
+        Integer[] output = new Integer[list.length];
+        for(int i = 0; i < list.length; i++){
+           output[i] = list[i];
+        }
+        return output;
     }
 }

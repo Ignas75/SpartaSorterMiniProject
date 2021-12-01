@@ -9,9 +9,10 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BubbleSorterTest {
-    public static boolean compareArrays(int[] arr1, int arr2[]) {
+    public static boolean compareArrays(int[] arr1, int[] arr2) {
         if(arr1.length != arr2.length){
             return false;
         }
@@ -40,7 +41,7 @@ public class BubbleSorterTest {
         int[] input = {5,6,3,7,9,10,8,2,1,4};
         int[] actual = BubbleSorter.bubbleSort(input);
         int[] expected = {1,2,3,4,5,6,7,8,9,10};
-        assertEquals(true, compareArrays(actual, expected));
+        assertTrue(compareArrays(actual, expected));
     }
 
     @Test
@@ -86,7 +87,6 @@ public class BubbleSorterTest {
         boolean displayOutput = true;
         ArrayUtils<Integer> testUtils = new ArrayUtils<>();
 
-        BubbleSorter<Integer> integerSorter = new BubbleSorter<>();
         List<Integer> input = ListGenerator.generateRandomIntegerList(size);
 
         // displaying generated list
