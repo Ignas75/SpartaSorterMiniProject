@@ -5,13 +5,18 @@ import com.spartaglobal.sortproject.utilities.ArrayUtils;
 import com.spartaglobal.sortproject.utilities.ListGenerator;
 import com.spartaglobal.sortproject.utilities.SorterFactory;
 import com.spartaglobal.sortproject.utilities.TypeConverter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class SortDriver {
-    public enum SortableType{STRING("Word", "[+-]?[a-zA-Z]+"),
+    private static Logger fileLogger = LogManager.getLogger("FileLogger");
+
+    public enum SortableType{
+        STRING("Word", "[+-]?[a-zA-Z]+"),
         DOUBLE("Real", "[+-]?\\d+(?:\\.\\d+)?"),
         INTEGER("Integer", "[+-]?[0-9]+");
 
@@ -42,7 +47,16 @@ public class SortDriver {
         }
     }
 
-    public enum SortingAlgorithms{BUBBLESORT, QUICKSORT;
+    public enum SortingAlgorithms{
+        BUBBLESORT(true),
+        QUICKSORT(true);
+
+        private final boolean implementsArrays;
+
+        SortingAlgorithms(boolean implementsArrays){
+            this.implementsArrays = implementsArrays;
+        };
+
         public static SortingAlgorithms getType(String name){
             for(SortingAlgorithms algorithm: SortingAlgorithms.values()){
                 if(algorithm.toString().equals(name)){
@@ -50,6 +64,10 @@ public class SortDriver {
                 }
             }
             return null;
+        }
+
+        public boolean getImplementsArrays(){
+            return this.implementsArrays;
         }
     }
 
@@ -145,11 +163,10 @@ public class SortDriver {
         long algorithmOneDuration = timeSort(algorithm1, input1, true);
 
         long algorithmTwoDuration = timeSort(algorithm2, input2, true);
-        System.out.println(algorithm2 + " finished in " + algorithmTwoDuration + "ns");
     }
 
     public static void arraysComparedWithArrayLists(){
-        SortingAlgorithms algorithm = chooseSortingAlgorithm();
+        SortingAlgorithms algorithm = chooseSortingAlgorithm(true);
         SorterFactory.makeSorter(algorithm, SortableType.INTEGER);
         int quantity = getUserComparisonAmount();
         int[] input = ListGenerator.generateRandomIntArray(quantity);
@@ -170,6 +187,8 @@ public class SortDriver {
             System.out.println(output);
             System.out.println(algorithm + " finished in " + duration + "ns");
         }
+        String logMsg = algorithm + " Sorted " + input.size() + " in " + duration + "ns";
+        fileLogger.info(logMsg);
         return duration;
     }
 
@@ -181,9 +200,12 @@ public class SortDriver {
         long end = System.nanoTime();
         long duration = end-start;
         if(displaySortResult) {
-            System.out.println(output);
+            ArrayUtils<Integer> arrayUtils = new ArrayUtils<>();
+            System.out.println(arrayUtils.arrayToString(input));
             System.out.println(algorithm + " finished in " + duration + "ns");
         }
+        String logMsg = algorithm + " Sorted " + input.length+ " in " + duration + "ns";
+        fileLogger.info(logMsg);
         return duration;
     }
 
@@ -208,10 +230,12 @@ public class SortDriver {
 
     }
 
-    public static SortingAlgorithms chooseSortingAlgorithm(boolean excludeChoice, SortingAlgorithms excludedAlgorithm){
+    public static SortingAlgorithms chooseSortingAlgorithm(boolean excludeChoice,
+                                                           SortingAlgorithms excludedAlgorithm,
+                                                           boolean withArraysOnly){
         ArrayList<String> choices = new ArrayList<>();
         for(SortingAlgorithms algorithm: SortingAlgorithms.values()){
-            if(!(excludeChoice && algorithm == excludedAlgorithm)){
+            if(!(excludeChoice && algorithm == excludedAlgorithm) && !(withArraysOnly && !(algorithm.implementsArrays))){
                 choices.add(algorithm.toString());
             }
         }
@@ -224,7 +248,16 @@ public class SortDriver {
 
     public static SortingAlgorithms chooseSortingAlgorithm(){
         // doesn't matter what is excluded because nothing is excluded
-        return chooseSortingAlgorithm(false, SortingAlgorithms.values()[0]);
+        return chooseSortingAlgorithm(false, SortingAlgorithms.values()[0], false);
+    }
+
+    public static SortingAlgorithms chooseSortingAlgorithm(boolean withArraysOnly){
+        return chooseSortingAlgorithm(false, SortingAlgorithms.values()[0], withArraysOnly);
+    }
+
+    public static SortingAlgorithms chooseSortingAlgorithm(boolean excludeChoice,
+                                                           SortingAlgorithms excludedAlgorithm){
+        return chooseSortingAlgorithm(excludeChoice, excludedAlgorithm, false);
     }
 
     public static SortableType chooseDataType(){
