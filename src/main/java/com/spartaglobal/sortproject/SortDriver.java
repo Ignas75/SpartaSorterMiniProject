@@ -49,7 +49,8 @@ public class SortDriver {
 
     public enum SortingAlgorithms{
         BUBBLESORT(true),
-        QUICKSORT(true);
+        QUICKSORT(true),
+        TREESORT(true);
 
         private final boolean implementsArrays;
 
@@ -127,8 +128,8 @@ public class SortDriver {
                 default:
                     break;
             }
-            sorter.sort(data);
-            System.out.println(data);
+            List output = sorter.sort(data);
+            System.out.println(output);
         } catch(Exception e){
             System.out.println("Expected data type mismatch with received data");
             e.printStackTrace();
@@ -150,7 +151,7 @@ public class SortDriver {
         else{
             algorithm1 = chooseSortingAlgorithm();
             algorithm2 = chooseSortingAlgorithm(true, algorithm1);
-            System.out.println("\n We will be comparing" + algorithm1 + " and " + algorithm2);
+            System.out.println("\n We will be comparing " + algorithm1 + " and " + algorithm2);
         }
         // comparing sorting algorithms
         int arraySize = getUserComparisonAmount();
@@ -161,7 +162,6 @@ public class SortDriver {
         System.out.println("Sorting: ");
         System.out.println(input1);
         long algorithmOneDuration = timeSort(algorithm1, input1, true);
-
         long algorithmTwoDuration = timeSort(algorithm2, input2, true);
     }
 
@@ -216,14 +216,19 @@ public class SortDriver {
         int quantity = 1000;
         boolean succeeded = false;
         while(!succeeded){
-            try{
-                System.out.println("\nEnter how many elements would you like in your array:");
-                if(scanner.hasNextInt()){
-                    quantity = scanner.nextInt();
+            System.out.println("\nEnter how many elements would you like in your array:");
+            String input = scanner.nextLine();
+            if(input.matches("[0-9]+]")){
+                quantity = Integer.parseInt(input);
+                if(quantity > 99){
                     succeeded = true;
                 }
-            }catch(Exception e){
-                System.out.println("Please enter nothing but a whole number");
+                else{
+                    System.out.println("Please enter a number bigger than 99 for a decent comparison");
+                }
+            }
+            else{
+                System.out.println("Please enter a number");
             }
         }
         return quantity;
